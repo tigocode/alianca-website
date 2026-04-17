@@ -11,10 +11,26 @@ import {
   Home,
   Briefcase,
   Sprout,
-  TrendingUp
+  TrendingUp,
+  LucideIcon // Importação necessária para tipagem
 } from 'lucide-react';
 
-// Componentes de Ícones Sociais em SVG para evitar erros de importação (Linkedin/Instagram)
+// --- INTERFACES DE TIPAGEM ---
+
+interface ServiceCardProps {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  category: string;
+}
+
+interface FAQItemProps {
+  question: string;
+  answer: string;
+}
+
+// --- COMPONENTES AUXILIARES ---
+
 const InstagramIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
 );
@@ -23,8 +39,8 @@ const LinkedinIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
 );
 
-// Componente de Cartão de Serviço
-const ServiceCard = ({ icon: Icon, title, description, category }) => (
+// Componente de Cartão de Serviço (CORRIGIDO)
+const ServiceCard = ({ icon: Icon, title, description, category }: ServiceCardProps) => (
   <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 group">
     <div className="w-14 h-14 bg-amber-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-amber-500 transition-colors">
       <Icon className="text-amber-600 group-hover:text-white" size={28} />
@@ -38,8 +54,8 @@ const ServiceCard = ({ icon: Icon, title, description, category }) => (
   </div>
 );
 
-// Componente de Acordião para FAQ
-const FAQItem = ({ question, answer }) => {
+// Componente de Acordião para FAQ (CORRIGIDO)
+const FAQItem = ({ question, answer }: FAQItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="border-b border-slate-200 py-4">
@@ -54,6 +70,8 @@ const FAQItem = ({ question, answer }) => {
     </div>
   );
 };
+
+// --- COMPONENTE PRINCIPAL ---
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -70,8 +88,9 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // LÓGICA DE CÁLCULO PROFISSIONAL
-  const taxaKwh = { monofasico: 30, bifasico: 50, trifasico: 100 }[tipoRede];
+  // LÓGICA DE CÁLCULO
+  const taxas = { monofasico: 30, bifasico: 50, trifasico: 100 };
+  const taxaKwh = taxas[tipoRede as keyof typeof taxas] || 50;
   const precoKwh = consumoKwh > 0 ? (contaMensal / consumoKwh) : 0;
   const economiaMensal = Math.max(0, (consumoKwh - taxaKwh) * precoKwh);
   const economiaAnual = economiaMensal * 12;
@@ -99,15 +118,14 @@ export default function App() {
         </span>
       </a>
 
-      {/* Header - Corrigido z-index e filtro de cor para o logo */}
+      {/* Header */}
       <header className={`fixed w-full top-0 left-0 z-[100] transition-all duration-300 ${scrolled ? 'bg-white shadow-md py-3' : 'bg-blue-900/10 backdrop-blur-sm py-5'}`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            {/* Filtro aplicado quando NÃO houve scroll (fundo escuro): brightness(0) invert(1) deixa o logo branco */}
             <img
               src="logo-Alianca-semfundo.png"
               alt="Aliança Solar"
-              className={`h-10 md:h-30 object-contain transition-all duration-300 ${!scrolled ? 'brightness-10 invert-100' : ''}`}
+              className={`h-10 md:h-30 object-contain transition-all duration-300 ${!scrolled ? 'brightness-0 invert' : ''}`}
             />
           </div>
 
@@ -124,7 +142,7 @@ export default function App() {
             </a>
           </div>
 
-          <button className="md:hidden text-blue-900" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={30} /> : <Menu size={30} className={scrolled ? 'text-blue-900' : 'text-white'} />}
           </button>
         </div>
@@ -181,7 +199,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Calculadora Profissional - Lógica e estados revisados */}
+      {/* Simulador */}
       <section id="simulador" className="py-24 bg-slate-50 relative z-20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
@@ -346,7 +364,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Footer - Logo forçado a branco para visibilidade no azul */}
+      {/* Footer */}
       <footer className="bg-blue-900 text-white pt-24 pb-12 relative z-10">
         <div className="container mx-auto px-6 text-center">
           <img
@@ -362,7 +380,7 @@ export default function App() {
               <LinkedinIcon />
             </a>
           </div>
-          <p className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} Codenu. Todos os direitos reservados.</p>
+          <p className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} Aliança Solar. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
