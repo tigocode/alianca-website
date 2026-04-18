@@ -89,7 +89,7 @@ export default function App() {
   }, []);
 
   // LÓGICA DE CÁLCULO
-  const taxas = { monofasico: 30, bifasico: 50, trifasico: 100 };
+  const taxas = { bifasico: 50, trifasico: 100 };
   const taxaKwh = taxas[tipoRede as keyof typeof taxas] || 50;
   const precoKwh = consumoKwh > 0 ? (contaMensal / consumoKwh) : 0;
   const economiaMensal = Math.max(0, (consumoKwh - taxaKwh) * precoKwh);
@@ -97,7 +97,7 @@ export default function App() {
   const economia25Anos = economiaAnual * 25 * 1.5;
   const kwpNecessario = (consumoKwh / (4.5 * 30 * 0.80));
   const estimativaPaineis = Math.ceil(kwpNecessario / 0.55);
-  const investimentoEstimado = kwpNecessario * 3800;
+  const investimentoEstimado = kwpNecessario * 2906.2;
   const paybackAnos = economiaMensal > 0 ? (investimentoEstimado / economiaMensal / 12).toFixed(1) : "0";
 
   const whatsappLink = `https://wa.me/553798762495?text=Olá! Fiz uma simulação profissional no site.%0A- Conta: R$${contaMensal}%0A- Consumo: ${consumoKwh}kWh%0A- Rede: ${tipoRede}%0A- Economia Anual: R$${economiaAnual.toFixed(2)}%0AGostaria de um orçamento detalhado!`;
@@ -125,7 +125,7 @@ export default function App() {
             <img
               src="logo-Alianca-semfundo.png"
               alt="Aliança Solar"
-              className={`h-10 md:h-30 object-contain transition-all duration-300 ${!scrolled ? 'brightness-0 invert' : ''}`}
+              className={`h-10 md:h-25 object-contain transition-all duration-300 ${!scrolled ? 'brightness-0 invert' : ''}`}
             />
           </div>
 
@@ -213,8 +213,8 @@ export default function App() {
                 <div className="space-y-12">
                   <div>
                     <label className="text-slate-800 font-bold block mb-4 flex items-center gap-2">Tipo de Conexão</label>
-                    <div className="grid grid-cols-3 gap-3">
-                      {['monofasico', 'bifasico', 'trifasico'].map((type) => (
+                    <div className="grid grid-cols-2 gap-3">
+                      {['bifasico', 'trifasico'].map((type) => (
                         <button
                           key={type}
                           type="button"
@@ -276,7 +276,7 @@ export default function App() {
 
                   <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/10">
                     <div>
-                      <p className="text-blue-300 text-sm font-bold mb-1">Payback Estimado</p>
+                      <p className="text-blue-300 text-sm font-bold mb-1">Se Paga (Tempo Estimado)</p>
                       <p className="text-2xl font-bold">{paybackAnos} Anos</p>
                     </div>
                     <div>
@@ -373,14 +373,14 @@ export default function App() {
             className="h-30 mx-auto mb-10 object-contain brightness-0 invert"
           />
           <div className="flex justify-center gap-6 mb-12">
-            <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-amber-500 transition-colors">
+            <a href="https://www.instagram.com/alliancasolar/" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-amber-500 transition-colors">
               <InstagramIcon />
             </a>
             <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-amber-500 transition-colors">
               <LinkedinIcon />
             </a>
           </div>
-          <p className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} Aliança Solar. Todos os direitos reservados.</p>
+          <p className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} Codenu. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
